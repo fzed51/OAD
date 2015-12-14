@@ -1,0 +1,17 @@
+{
+    "name": "fzed51/o-a-d",
+    "description": "Objet d'Acces aux Donnees.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "fzed51",
+            "email": "fzed51@users.noreply.github.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "fzed51\\OAD\\": "src/"
+        }
+    }
+
+}
