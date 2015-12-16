@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace fzed51\OAD\DB;
+namespace fzed51\OAD;
 
 /**
  * Description of connexion
@@ -18,10 +18,10 @@ class Connexion {
     /**
      * @var array
      */
-    private $Options;
-    private $PassWord;
-    private $UserName;
-    private $Dns;
+    protected $Options;
+    protected $PassWord;
+    protected $UserName;
+    protected $Dns;
 
     public function __construct($Dns, $UserName = null, $PassWord = null, array $Options = []) {
         $this->Dns = $Dns;

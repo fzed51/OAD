@@ -6,17 +6,18 @@
  * and open the template in the editor.
  */
 
-namespace fzed51\OAD\DB;
+namespace fzed51\OAD\Test;
 
 /**
- * Description of SqliteConnexion
+ * Description of User
  *
  * @author fabien.sanchez
  */
-class SqliteConnexion extends Connexion {
+class User {
 
-    public function __construct() {
-        ;
-    }
+    public $id;
+    public $login;
+    public $mdp;
+    public $email;
 
 }

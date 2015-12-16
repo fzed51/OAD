@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace fzed51\OAD\DB;
+namespace fzed51\OAD;
 
 /**
  * Description of PostgresqlConnexion

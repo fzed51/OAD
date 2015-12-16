@@ -6,13 +6,13 @@
  * and open the template in the editor.
  */
 
-namespace fzed51\OAD\DB;
+namespace fzed51\OAD;
 
 /**
- * Description of OracleConnexion
+ * Description of MysqlConnexion
  *
  * @author fabien.sanchez
  */
-class OracleConnexion extends Connexion {
+class MysqlConnexion extends Connexion {
     //put your code here
 }

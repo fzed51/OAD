@@ -6,13 +6,13 @@
  * and open the template in the editor.
  */
 
-namespace fzed51\OAD\DB;
+namespace fzed51\OAD\Test;
 
 /**
- * Description of MysqlConnexion
+ * Description of UsersTable
  *
  * @author fabien.sanchez
  */
-class MysqlConnexion extends Connexion {
-    //put your code here
+class UsersTable extends \fzed51\OAD\Table {
+
 }
