@@ -27,25 +27,56 @@
 namespace fzed51\OAD;
 
 /**
- * Description of SqliteConnexion
+ * Description of Entity
  *
  * @author fabien.sanchez
  */
-class SqliteConnexion extends Connexion {
+abstract class Entity {
 
-    public function __construct($filepath, $userName = null, $passWord = null, array $options = []) {
-        $this->setDns($filepath);
-        $this->UserName = $userName;
-        $this->PassWord = $passWord;
-        $this->Options = $options;
+    /**
+     * @var string
+     */
+    protected $table;
+
+    /**
+     * @var array
+     */
+    protected $fields = [];
+
+    /**
+     * @var array
+     */
+    protected $data = [];
+
+    /**
+     * @var array
+     */
+    protected $fk = [];
+
+    final public function __construct(\fzed51\OAD\Table $table) {
+        $this->table = $table;
     }
 
-    function setDns($filepath) {
-        $path = realpath(dirname($filepath));
-        $file = basename($filepath);
-        $fullPath = $path . DIRECTORY_SEPARATOR . $file;
-        $this->Dns = "sqlite:{$fullPath}";
-        return $this;
+    public function __set($name, $value) {
+        if (!in_array($name, $this->fields)) {
+            throw new Exception("La propriete {$name} n'est pa connue");
+        }
+        $this->data[$name] = $value;
+    }
+
+    public function __get($name) {
+        if (!in_array($name, $this->fields)) {
+            throw new Exception("La propriete {$name} n'est pa connue");
+        }
+        if (!isset($this->data[$name])) {
+            return null;
+        }
+        if (isset($this->fk[$name])) {
+            $table = $this->fk[$name];
+            $db = $this->table->db;
+            return $db->getTable($table)->getId($this->data[$name]);
+        }
+        return $this->data[$name];
     }
 
 }

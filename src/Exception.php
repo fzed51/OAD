@@ -27,25 +27,10 @@
 namespace fzed51\OAD;
 
 /**
- * Description of SqliteConnexion
+ * Description of Exception
  *
  * @author fabien.sanchez
  */
-class SqliteConnexion extends Connexion {
-
-    public function __construct($filepath, $userName = null, $passWord = null, array $options = []) {
-        $this->setDns($filepath);
-        $this->UserName = $userName;
-        $this->PassWord = $passWord;
-        $this->Options = $options;
-    }
-
-    function setDns($filepath) {
-        $path = realpath(dirname($filepath));
-        $file = basename($filepath);
-        $fullPath = $path . DIRECTORY_SEPARATOR . $file;
-        $this->Dns = "sqlite:{$fullPath}";
-        return $this;
-    }
-
+class Exception extends \Exception {
+    //put your code here
 }
