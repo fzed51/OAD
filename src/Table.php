@@ -27,6 +27,7 @@
 namespace fzed51\OAD;
 
 use fzed51\OAD\AccessDB;
+use PDO;
 
 /**
  * Description of Table
@@ -80,7 +81,7 @@ abstract class Table {
         $this->db->connect();
         $statement = $this->db->prepare("select * from {$this->tableName}");
         $statement->execute();
-        return $statement->fetchAll(\PDO::FETCH_CLASS, $this->entityClass, [$this]);
+        return $statement->fetchAll(PDO::FETCH_CLASS, $this->entityClass, [$this]);
     }
 
     final function getId(int $id) {
@@ -108,6 +109,10 @@ abstract class Table {
 
     final function getPrimaryKey() {
         return $this->primaryKey;
+    }
+
+    final function save(Entity $entity) {
+        
     }
 
 }

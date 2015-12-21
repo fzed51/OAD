@@ -12,6 +12,12 @@
         "psr-4": {
             "fzed51\\OAD\\": "src/"
         }
+    },
+    "autoload-dev":{
+      "psr-4": {
+        "fzed51\\OAD\\": "src/",
+        "Test\\": "test/"
+      }
     }
 
 }

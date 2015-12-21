@@ -29,8 +29,8 @@ require './vendor/autoload.php';
 use fzed51\OAD\AccessDB;
 use fzed51\OAD\SqliteConnexion;
 
-$db = new AccessDB(new SqliteConnexion('./db.sqlite'));
-$db->setNameSpaceAnalyse("\\fzed51\\OAD\\Test");
+$db = new AccessDB(new SqliteConnexion('./test/db.sqlite'));
+$db->setNameSpaceAnalyse("\\Test");
 $users = $db->getTable('Users');
 $allUsers = $users->getAll();
 

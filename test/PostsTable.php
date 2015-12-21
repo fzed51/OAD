@@ -1,6 +1,6 @@
 <?php
 
-namespace fzed51\OAD\Test;
+namespace Test;
 
 /**
  * Description of PostsTable
