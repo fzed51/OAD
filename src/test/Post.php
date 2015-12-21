@@ -7,13 +7,16 @@ namespace fzed51\OAD\Test;
  *
  * @author fabien.sanchez
  */
-class Post {
+class Post extends \fzed51\OAD\Entity {
 
     protected $fields = [
         'id',
         'titre',
         'content',
         'id_owner'
+    ];
+    protected $fk = [
+        'owner' => ['id_owner', 'Users']
     ];
 
 }

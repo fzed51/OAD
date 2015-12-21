@@ -90,4 +90,24 @@ abstract class Table {
         return $statement->fetchObject($this->entityClass, [$this]);
     }
 
+    final function getDb() {
+        return $this->db;
+    }
+
+    final function getNew() {
+        $entityClass = $this->entityClass;
+        return new $entityClass($this);
+    }
+
+    final function accept(Entity $entity) {
+        if (get_class($entity) == $this->entityClass) {
+            return true;
+        }
+        return false;
+    }
+
+    final function getPrimaryKey() {
+        return $this->primaryKey;
+    }
+
 }

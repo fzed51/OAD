@@ -46,37 +46,77 @@ abstract class Entity {
     /**
      * @var array
      */
-    protected $data = [];
+    private $data = [];
 
     /**
      * @var array
      */
     protected $fk = [];
+    private $constructed = false;
+    private $modified = false;
 
-    final public function __construct(\fzed51\OAD\Table $table) {
+    final function __construct(\fzed51\OAD\Table $table) {
         $this->table = $table;
+        $this->constructed = true;
+        $this->modified = false;
     }
 
-    public function __set($name, $value) {
-        if (!in_array($name, $this->fields)) {
-            throw new Exception("La propriete {$name} n'est pa connue");
+    private function setData($dataField, $value) {
+        if ($this->constructed && $dataField == $this->table->getPrimaryKey()) {
+            if (isset($this->data[$dataField]) && !empty($this->data[$dataField])) {
+                throw new Exception("Impossible de modifier '$dataField' car c'est une clé primaire !");
+            }
         }
-        $this->data[$name] = $value;
+        $this->data[$dataField] = $value;
+        $this->modified = true;
     }
 
-    public function __get($name) {
-        if (!in_array($name, $this->fields)) {
+    final function __set($name, $value) {
+        if (!$this->has($name)) {
             throw new Exception("La propriete {$name} n'est pa connue");
         }
-        if (!isset($this->data[$name])) {
-            return null;
+        if (array_key_exists($name, $this->fk)) {
+            list($field, $tableName) = $this->fk[$name];
+            $db = $this->table->getDb();
+            $table = $db->getTable($tableName);
+            if ($table->accept($value)) {
+                $this->setData($field, $value->getId());
+            }
         }
-        if (isset($this->fk[$name])) {
-            $table = $this->fk[$name];
-            $db = $this->table->db;
-            return $db->getTable($table)->getId($this->data[$name]);
+        $this->setData($name, $value);
+    }
+
+    final function __get($name) {
+        if (!$this->has($name)) {
+            throw new Exception("La propriete {$name} n'est pa connue");
+        }
+        if (array_key_exists($name, $this->fk)) {
+            list($field, $table) = $this->fk[$name];
+            $db = $this->table->getDb();
+            return $db->getTable($table)->getId($this->data[$field]);
         }
         return $this->data[$name];
+    }
+
+    final function has($name) {
+        if (in_array($name, $this->fields)) {
+            return true;
+        }
+        if (array_key_exists($name, $this->fk)) {
+            return true;
+        }
+        return false;
+    }
+
+    final function getId() {
+        $fieldNameId = $this->table->getPrimaryKey();
+        return $this->data[$fieldNameId];
+    }
+
+    final function saveData() {
+        if ($this->modified) {
+            $this->table->save($this);
+        }
     }
 
 }
