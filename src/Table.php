@@ -26,7 +26,6 @@
 
 namespace fzed51\OAD;
 
-use fzed51\OAD\AccessDB;
 use PDO;
 
 /**
@@ -112,7 +111,21 @@ abstract class Table {
     }
 
     final function save(Entity $entity) {
-        
+        if (empty($entity->{$this->primaryKey})) {
+            $fields = array_diff($entity->getFields(), [$this->primaryKey]);
+            $listField = implode(', ', $fields);
+            $listNoValue = implode(', ', array_fill(0, count($fields), '?'));
+            $sql = "insert into {$this->tableName} ({$listField}) values ({$listNoValue})";
+            echo $sql . PHP_EOL;
+            $statement = $this->db->prepare($sql);
+            $values = [];
+            foreach ($fields as $field) {
+                $values[] = $entity->{$field};
+            }
+            $statement->execute($values);
+        } else {
+
+        }
     }
 
 }

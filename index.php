@@ -31,17 +31,18 @@ use fzed51\OAD\SqliteConnexion;
 
 $db = new AccessDB(new SqliteConnexion('./test/db.sqlite'));
 $db->setNameSpaceAnalyse("\\Test");
-$users = $db->getTable('Users');
-$allUsers = $users->getAll();
 
-$user1 = $users->getId(1);
-
-$post = $db->getTable('Posts')->getId(1);
-$owner = $post->owner;
+foreach ($db->getTable('Posts')->getAll() as $post) {
+    echo PHP_EOL;
+    echo $post->titre . PHP_EOL;
+    echo str_pad("", strlen($post->titre) + 2, "=") . PHP_EOL;
+    echo wordwrap($post->content, 80, PHP_EOL) . PHP_EOL;
+    echo PHP_EOL;
+}
 
 $nPost = $db->getTable('Posts')->getNew();
 $nPost->titre = "Mon 2eme post";
 $nPost->content = "Vivamus fermentum semper porta. Nunc diam velit, adipiscing ut tristique vitae, sagittis vel odio. Maecenas convallis ullamcorper ultricies. Curabitur ornare, ligula semper consectetur sagittis, nisi diam iaculis velit, id fringilla sem nunc vel mi. Nam dictum, odio nec pretium volutpat, arcu ante placerat erat, non tristique elit urna et turpis. Quisque mi metus, ornare sit amet fermentum et, tincidunt et orci. Fusce eget orci a orci congue vestibulum. Ut dolor diam, elementum et vestibulum eu, porttitor vel elit. Curabitur venenatis pulvinar tellus gravida ornare. Sed et erat faucibus nunc euismod ultricies ut id justo. Nullam cursus suscipit nisi, et ultrices justo sodales nec. Fusce venenatis facilisis lectus ac semper. Aliquam at massa ipsum. Quisque bibendum purus convallis nulla ultrices ultricies. Nullam aliquam, mi eu aliquam tincidunt, purus velit laoreet tortor, viverra pretium nisi quam vitae mi. Fusce vel volutpat elit. Nam sagittis nisi dui.";
 
-$nPost->owner = $owner;
+$nPost->owner = $db->getTable('Users')->getId(1);
 $nPost->saveData();

@@ -55,7 +55,7 @@ abstract class Entity {
     private $constructed = false;
     private $modified = false;
 
-    final function __construct(\fzed51\OAD\Table $table) {
+    final function __construct(Table $table) {
         $this->table = $table;
         $this->constructed = true;
         $this->modified = false;
@@ -117,6 +117,10 @@ abstract class Entity {
         if ($this->modified) {
             $this->table->save($this);
         }
+    }
+
+    final function getFields() {
+        return $this->fields;
     }
 
 }
