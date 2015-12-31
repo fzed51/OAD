@@ -46,3 +46,4 @@ $nPost->content = "Vivamus fermentum semper porta. Nunc diam velit, adipiscing u
 
 $nPost->owner = $db->getTable('Users')->getId(1);
 $nPost->saveData();
+echo "Le nouveau post à l'ID {$nPost->getId()}";

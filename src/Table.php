@@ -116,13 +116,14 @@ abstract class Table {
             $listField = implode(', ', $fields);
             $listNoValue = implode(', ', array_fill(0, count($fields), '?'));
             $sql = "insert into {$this->tableName} ({$listField}) values ({$listNoValue})";
-            echo $sql . PHP_EOL;
+            //echo $sql . PHP_EOL;
             $statement = $this->db->prepare($sql);
             $values = [];
             foreach ($fields as $field) {
                 $values[] = $entity->{$field};
             }
             $statement->execute($values);
+            $entity->{$this->primaryKey} = $this->db->lastInsertId();
         } else {
 
         }

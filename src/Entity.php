@@ -115,8 +115,15 @@ abstract class Entity {
 
     final function saveData() {
         if ($this->modified) {
+            foreach ($this->fk as $fk => $data) {
+                list($field, $tableName) = $data;
+                if (isset($this->data[$fk])) {
+                    $this->data[$field] = $this->data[$fk]->saveData()->getId();
+                }
+            }
             $this->table->save($this);
         }
+        return $this;
     }
 
     final function getFields() {
