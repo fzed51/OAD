@@ -29,7 +29,14 @@ require './vendor/autoload.php';
 use fzed51\OAD\AccessDB;
 use fzed51\OAD\SqliteConnexion;
 
-$db = new AccessDB(new SqliteConnexion('./test/db.sqlite'));
+$end = "";
+echo PHP_SAPI;
+if (PHP_SAPI == "cli-server") {
+    echo "<pre>";
+    $end = "</pre>";
+}
+
+$db = new AccessDB(new SqliteConnexion('./test/data/db.sqlite'));
 $db->setNameSpaceAnalyse("\\Test");
 
 foreach ($db->getTable('Posts')->getAll() as $post) {
@@ -47,3 +54,16 @@ $nPost->content = "Vivamus fermentum semper porta. Nunc diam velit, adipiscing u
 $nPost->owner = $db->getTable('Users')->getId(1);
 $nPost->saveData();
 echo "Le nouveau post à l'ID {$nPost->getId()}";
+
+$nOwner = $db->getTable('Users')->getNew();
+$nOwner->login = 'antho';
+$nOwner->mdp = 'marsoin';
+$nOwner->email = 'antho@gmail.fr';
+
+$nPost2 = $db->getTable('Posts')->getNew();
+$nPost2->titre = "Mon 3eme post";
+$nPost2->content = "Vivamus fermentum semper porta. Nunc diam velit, adipiscing ut tristique vitae, sagittis vel odio. Maecenas convallis ullamcorper ultricies. Curabitur ornare, ligula semper consectetur sagittis, nisi diam iaculis velit, id fringilla sem nunc vel mi. Nam dictum, odio nec pretium volutpat, arcu ante placerat erat, non tristique elit urna et turpis. Quisque mi metus, ornare sit amet fermentum et, tincidunt et orci. Fusce eget orci a orci congue vestibulum. Ut dolor diam, elementum et vestibulum eu, porttitor vel elit. Curabitur venenatis pulvinar tellus gravida ornare. Sed et erat faucibus nunc euismod ultricies ut id justo. Nullam cursus suscipit nisi, et ultrices justo sodales nec. Fusce venenatis facilisis lectus ac semper. Aliquam at massa ipsum. Quisque bibendum purus convallis nulla ultrices ultricies. Nullam aliquam, mi eu aliquam tincidunt, purus velit laoreet tortor, viverra pretium nisi quam vitae mi. Fusce vel volutpat elit. Nam sagittis nisi dui.";
+$nPost->owner = $nOwner;
+$nPost->saveData();
+
+echo $end;

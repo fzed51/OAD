@@ -67,7 +67,7 @@ abstract class Entity {
                 throw new Exception("Impossible de modifier '$dataField' car c'est une clé primaire !");
             }
         }
-        $this->data[$dataField] = $value;
+        $this->data[$dataField] = is_null($value) ? 0 : $value;
         $this->modified = true;
     }
 
@@ -110,14 +110,14 @@ abstract class Entity {
 
     final function getId() {
         $fieldNameId = $this->table->getPrimaryKey();
-        return $this->data[$fieldNameId];
+        return array_key_exists($fieldNameId, $this->data) ? $this->data[$fieldNameId] : null;
     }
 
     final function saveData() {
         if ($this->modified) {
             foreach ($this->fk as $fk => $data) {
                 list($field, $tableName) = $data;
-                if (isset($this->data[$fk])) {
+                if (isset($this->data[$field])) {
                     $this->data[$field] = $this->data[$fk]->saveData()->getId();
                 }
             }

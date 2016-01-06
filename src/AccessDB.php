@@ -70,6 +70,12 @@ class AccessDB extends \PDO {
         return $this;
     }
 
+    /**
+     *
+     * @param string $table
+     * @return \fzed51\OAD\Table
+     * @throws \fzed51\OAD\Exception
+     */
     function getTable($table) {
 
         $classTable = $this->nameSpaceAnalyse . $table . 'Table';

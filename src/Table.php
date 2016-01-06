@@ -60,6 +60,10 @@ abstract class Table {
      */
     protected $primaryKey;
 
+    /**
+     *
+     * @param \fzed51\OAD\AccessDB $db
+     */
     final function __construct(AccessDB $db) {
         $this->db = $db;
         $this->tableClass = static::class;
@@ -83,6 +87,11 @@ abstract class Table {
         return $statement->fetchAll(PDO::FETCH_CLASS, $this->entityClass, [$this]);
     }
 
+    /**
+     *
+     * @param int $id
+     * @return \fzed51\OAD\Entity
+     */
     final function getId(int $id) {
         $this->db->connect();
         $statement = $this->db->prepare("select * from {$this->tableName} where {$this->primaryKey} = ?");
@@ -90,10 +99,18 @@ abstract class Table {
         return $statement->fetchObject($this->entityClass, [$this]);
     }
 
+    /**
+     *
+     * @return \fzed51\OAD\AccessDB
+     */
     final function getDb() {
         return $this->db;
     }
 
+    /**
+     *
+     * @return \fzed51\OAD\Entity
+     */
     final function getNew() {
         $entityClass = $this->entityClass;
         return new $entityClass($this);
@@ -111,12 +128,11 @@ abstract class Table {
     }
 
     final function save(Entity $entity) {
+        $fields = array_diff($entity->getFields(), [$this->primaryKey]);
         if (empty($entity->{$this->primaryKey})) {
-            $fields = array_diff($entity->getFields(), [$this->primaryKey]);
             $listField = implode(', ', $fields);
             $listNoValue = implode(', ', array_fill(0, count($fields), '?'));
             $sql = "insert into {$this->tableName} ({$listField}) values ({$listNoValue})";
-            //echo $sql . PHP_EOL;
             $statement = $this->db->prepare($sql);
             $values = [];
             foreach ($fields as $field) {
@@ -125,7 +141,17 @@ abstract class Table {
             $statement->execute($values);
             $entity->{$this->primaryKey} = $this->db->lastInsertId();
         } else {
-
+            $sql = "update {$this->tableName} set ";
+            $values = [];
+            foreach ($fields as $field) {
+                $values[] = $entity->{$field};
+                $sql .= "{$field} = ?, ";
+            }
+            $sql .= "where {$this->primaryKey} = {$entity->getId()}";
+            var_dump($sql);
+            die();
+            $statement = $this->db->prepare($sql);
+            $statement->execute($values);
         }
     }
 
